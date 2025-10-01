@@ -1,11 +1,11 @@
-import matplotlib
-matplotlib.use("TkAgg")   # 👈 fuerza a usar Tkinter en Windows
-
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+import numpy as np
+from PIL import Image
 from matplotlib.patches import Rectangle
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.animation import FuncAnimation
 
+# Definir colores
 colors = {
     'empty': 'white',
     'ant': 'orange',
@@ -13,50 +13,68 @@ colors = {
     'poison': 'red'
 }
 
+def load_and_resize(path, size=(64,64)):
+    """Carga y redimensiona una imagen PNG a numpy array"""
+    img = Image.open(path).convert("RGBA")
+    img = img.resize(size, Image.LANCZOS)
+    return np.array(img)
+
 def run_gui(grid_size, ant_start, mushroom_pos, poisons, path):
     rows, cols = grid_size
     fig, ax = plt.subplots(figsize=(6, 6))
 
-    # Dibujar grid base
+    # --- Dibujar grid con colores base ---
     for i in range(rows):
         for j in range(cols):
-            rect = Rectangle((j, rows - 1 - i), 1, 1,
-                             linewidth=1, edgecolor='black', facecolor=colors['empty'])
+            cell_color = colors['empty']
+
+            # Hormiga inicial
+            if (i, j) == ant_start:
+                cell_color = colors['ant']
+            # Hongo
+            elif (i, j) == mushroom_pos:
+                cell_color = colors['goal']
+            # Venenos
+            elif (i, j) in poisons:
+                cell_color = colors['poison']
+
+            rect = Rectangle((j, rows-1-i), 1, 1,
+                             linewidth=1, edgecolor='black', facecolor=cell_color)
             ax.add_patch(rect)
 
-    # Meta (goal)
-    goal_rect = Rectangle((mushroom_pos[1], rows - 1 - mushroom_pos[0]), 1, 1, facecolor=colors['goal'])
-    ax.add_patch(goal_rect)
+    # --- Cargar imágenes ---
+    ant_img = load_and_resize("src/assets/ant.png", size=(300,300))
+    mushroom_img = load_and_resize("src/assets/mushroom.png", size=(300,300))
+    poison_img = load_and_resize("src/assets/poison.png", size=(300,300))
+
+    def place_image(image, x, y, zoom=0.08):
+        """Coloca una imagen centrada en la celda"""
+        im = OffsetImage(image, zoom=zoom)
+        ab = AnnotationBbox(im, (x+0.5, y+0.5), frameon=False)
+        ax.add_artist(ab)
+        return ab
+
+    # Hongo
+    place_image(mushroom_img, mushroom_pos[1], rows-1-mushroom_pos[0], zoom=0.08)
 
     # Venenos
     for (r, c) in poisons:
-        poison_rect = Rectangle((c, rows - 1 - r), 1, 1, facecolor=colors['poison'])
-        ax.add_patch(poison_rect)
+        place_image(poison_img, c, rows-1-r, zoom=0.08)
 
-    # Hormiga inicial
-    ant_rect = Rectangle((ant_start[1], rows - 1 - ant_start[0]), 1, 1, facecolor=colors['ant'])
-    ax.add_patch(ant_rect)
+    # Hormiga (animada)
+    ant_artist = place_image(ant_img, ant_start[1], rows-1-ant_start[0], zoom=0.08)
 
-    # Animación: mover la hormiga por el path
+    # --- Animación de la hormiga ---
     def update(frame):
         (row, col) = path[frame]
-        ant_rect.set_xy((col, rows - 1 - row))
-        return [ant_rect]
+        ant_artist.xybox = (col+0.5, rows-1-row+0.5)
+        return [ant_artist]
 
-    # 👇 guardamos en variable global
-    ani = FuncAnimation(fig, update, frames=len(path), interval=700, blit=True, repeat=False)
+    ani = FuncAnimation(fig, update, frames=len(path), interval=700, blit=False, repeat=False)
 
-    # Leyenda
-    legend_elements = [
-        mpatches.Patch(color=colors['ant'], label='Hormiga'),
-        mpatches.Patch(color=colors['goal'], label='Hongo Mágico'),
-        mpatches.Patch(color=colors['poison'], label='Veneno')
-    ]
-    ax.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(1.3, 1))
-
+    # --- Configuración del tablero ---
     ax.set_xlim(0, cols)
     ax.set_ylim(0, rows)
     ax.set_aspect('equal')
     plt.title("Problema de Búsqueda: Hormiga vs Venenos")
-
     plt.show()
