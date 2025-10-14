@@ -14,7 +14,6 @@ colors = {
 }
 
 def load_and_resize(path, size=(64,64)):
-    """Carga y redimensiona una imagen PNG a numpy array"""
     img = Image.open(path).convert("RGBA")
     img = img.resize(size, Image.LANCZOS)
     return np.array(img)
@@ -23,7 +22,6 @@ def run_gui(grid_size, ant_start, mushroom_pos, poisons, path):
     rows, cols = grid_size
     fig, ax = plt.subplots(figsize=(6, 6))
 
-    # --- Dibujar grid con colores base ---
     for i in range(rows):
         for j in range(cols):
             cell_color = colors['empty']
@@ -42,13 +40,11 @@ def run_gui(grid_size, ant_start, mushroom_pos, poisons, path):
                              linewidth=1, edgecolor='black', facecolor=cell_color)
             ax.add_patch(rect)
 
-    # --- Cargar imágenes ---
     ant_img = load_and_resize("src/assets/ant.png", size=(300,300))
     mushroom_img = load_and_resize("src/assets/mushroom.png", size=(300,300))
     poison_img = load_and_resize("src/assets/poison.png", size=(300,300))
 
     def place_image(image, x, y, zoom=0.08):
-        """Coloca una imagen centrada en la celda"""
         im = OffsetImage(image, zoom=zoom)
         ab = AnnotationBbox(im, (x+0.5, y+0.5), frameon=False)
         ax.add_artist(ab)

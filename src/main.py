@@ -5,19 +5,22 @@ from models.items import Mushroom, Poison
 from gui.main_window import run_gui
 from algortithms.beam_search import beam_search
 from algortithms.dynamic_weighting import dynamic_weighted_a_star
+from utils.load_file import load_world_from_file
 
-ROWS, COLS = 5, 5
+(grid_size, ant_start, mushroom_pos, poisons_pos) = load_world_from_file("src/assets/data.txt")
 
 def setup_world():
-    grid = Grid(ROWS, COLS)
+    # Alternativamente, cargar desde archivo:
+    print(f"Cargando mundo desde archivo: {grid_size}, {ant_start}, {mushroom_pos}, {poisons_pos}")
+    grid = Grid(grid_size[0], grid_size[1])
 
-    ant = Ant(0, 0)
-    grid.set_cell(0, 0, 1)
+    ant = Ant(ant_start[0], ant_start[1])
+    grid.set_cell(ant.row, ant.col, 1)
 
-    mushroom = Mushroom(4, 4)
-    grid.set_cell(4, 4, 2)
+    mushroom = Mushroom(mushroom_pos[0], mushroom_pos[1])
+    grid.set_cell(mushroom.row, mushroom.col, 2)
 
-    poisons = [Poison(1, 3), Poison(2, 2), Poison(3, 1)]
+    poisons = [Poison(p[0], p[1]) for p in poisons_pos]
     for poison in poisons:
         grid.set_cell(poison.row, poison.col, 3)
 
@@ -25,13 +28,13 @@ def setup_world():
 
 def run_beam_search():
     grid, ant, mushroom, poisons = setup_world()
-    path = beam_search((ROWS, COLS), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
-    run_gui((ROWS, COLS), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
+    path = beam_search((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
+    run_gui((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
 
 def run_dynamic_weighted():
     grid, ant, mushroom, poisons = setup_world()
-    path = dynamic_weighted_a_star((ROWS, COLS), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
-    run_gui((ROWS, COLS), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
+    path = dynamic_weighted_a_star((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
+    run_gui((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
 
 
 if __name__ == "__main__":
