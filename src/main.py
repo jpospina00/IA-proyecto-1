@@ -1,11 +1,19 @@
+# main.py
+
 import tkinter as tk
+# Importaciones existentes
 from  models.grid import Grid
 from models.ant import Ant
 from models.items import Mushroom, Poison
 from gui.main_window import run_gui
 from algortithms.beam_search import beam_search
-from algortithms.dynamic_weighting import dynamic_weighted_a_star
+
+# Importación del nuevo algoritmo
+from algortithms.dynamic_weighting import dynamic_weighted_a_star 
+
 from utils.load_file import load_world_from_file
+
+# --- (El resto del código antes de las funciones run_* se mantiene igual) ---
 
 (grid_size, ant_start, mushroom_pos, poisons_pos) = load_world_from_file("src/assets/data.txt")
 
@@ -31,9 +39,13 @@ def run_beam_search():
     path = beam_search((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
     run_gui((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
 
+# Función nueva/modificada
 def run_dynamic_weighted():
     grid, ant, mushroom, poisons = setup_world()
+    # Llama al nuevo algoritmo
     path = dynamic_weighted_a_star((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons])
+    
+    # El path devuelto se pasa directamente a la GUI (run_gui es reutilizable)
     run_gui((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
 
 
@@ -43,6 +55,7 @@ if __name__ == "__main__":
 
     tk.Label(root, text="¿Qué algoritmo desea ejecutar?", font=("Arial", 14)).pack(pady=10)
     tk.Button(root, text="Beam Search", command=lambda:[root.destroy(), run_beam_search()]).pack(pady=5)
-    tk.Button(root, text="Dynamic Weighted A*", command=lambda:[root.destroy(), run_dynamic_weighted()]).pack(pady=5)
+    # Botón para el nuevo algoritmo
+    tk.Button(root, text="Dynamic Weighted A*", command=lambda:[root.destroy(), run_dynamic_weighted()]).pack(pady=5) 
 
     root.mainloop()
