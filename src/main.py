@@ -43,6 +43,6 @@ if __name__ == "__main__":
 
     tk.Label(root, text="¿Qué algoritmo desea ejecutar?", font=("Arial", 14)).pack(pady=10)
     tk.Button(root, text="Beam Search", command=lambda:[root.destroy(), run_beam_search()]).pack(pady=5)
-    tk.Button(root, text="Dynamic Weighted A*", command=lambda:[root.destroy(), run_dynamic_weighted()]).pack(pady=5)
+    tk.Button(root, text="Dynamic Weighted A*", command=lambda:[root.destroy(), run_dynamic_weighted()]).pack(pady=5) 
 
     root.mainloop()
