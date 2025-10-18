@@ -1,14 +1,18 @@
 # Tamaño del tablero
-12 12
+5 5
 
 # Posición inicial de la hormiga
-2 2
+0 0
 
 # Posición del hongo
-10 10
+4 4
 
 # Posiciones de venenos
 1 1
 2 4
+2 3
+3 3
+3 1
 2 1
-4 2
+4 1
+
