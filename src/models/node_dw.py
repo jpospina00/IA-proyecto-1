@@ -1,5 +1,3 @@
-# models/node_dw.py
-
 class NodeDW:
     def __init__(self, state: tuple, parent=None, g_cost: float = 0.0, h_cost: float = 0.0):
         self.state = state  # Posición (row, col)
