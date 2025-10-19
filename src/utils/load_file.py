@@ -5,13 +5,15 @@ def load_world_from_file(filename):
     # Tamaño
     rows, cols = map(int, lines[0].split())
 
+    # Beta
+    beta = int(lines[1])
     # Hormiga
-    ant_row, ant_col = map(int, lines[1].split())
+    ant_row, ant_col = map(int, lines[2].split())
 
     # Hongo
-    mushroom_row, mushroom_col = map(int, lines[2].split())
+    mushroom_row, mushroom_col = map(int, lines[3].split())
 
     # Venenos
-    poisons = [tuple(map(int, line.split())) for line in lines[3:]]
+    poisons = [tuple(map(int, line.split())) for line in lines[4:]]
 
-    return (rows, cols), (ant_row, ant_col), (mushroom_row, mushroom_col), poisons
+    return (rows, cols), beta, (ant_row, ant_col), (mushroom_row, mushroom_col), poisons

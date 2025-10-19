@@ -10,7 +10,7 @@ def beam_search(grid_size, start, goal, poisons, beam_width=2):
     print("=== INICIO DEL BEAM SEARCH ===")
     print(f"Inicio: {start}, Meta: {goal}, Beam width = {beam_width}")
     print("-" * 50)
-
+    visited = {start}
     root = Node(state=start, parent=None, heuristic=manhattan_distance(start, goal))
     frontier = [root]
     step = 1
@@ -29,8 +29,13 @@ def beam_search(grid_size, start, goal, poisons, beam_width=2):
                 return node.get_path()
 
             children = []
+            
             for neighbor in get_neighbors(node.state, grid_size, poisons):
+                if neighbor in visited and beam_width == 1:
+                    print(f"     - {neighbor} (bloqueado o visitado)")
+                    continue
                 h = manhattan_distance(neighbor, goal)
+                visited.add(neighbor)
                 child = Node(state=neighbor, parent=node, heuristic=h)
                 node.add_child(child)
                 new_frontier.append(child)
