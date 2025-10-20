@@ -7,13 +7,16 @@ def load_world_from_file(filename):
 
     # Beta
     beta = int(lines[1])
+
+     # Epsilon
+    epsilon = float(lines[2])
     # Hormiga
-    ant_row, ant_col = map(int, lines[2].split())
+    ant_row, ant_col = map(int, lines[3].split())
 
     # Hongo
-    mushroom_row, mushroom_col = map(int, lines[3].split())
+    mushroom_row, mushroom_col = map(int, lines[4].split())
 
     # Venenos
-    poisons = [tuple(map(int, line.split())) for line in lines[4:]]
+    poisons = [tuple(map(int, line.split())) for line in lines[5:]]
 
-    return (rows, cols), beta, (ant_row, ant_col), (mushroom_row, mushroom_col), poisons
+    return (rows, cols), beta, epsilon, (ant_row, ant_col), (mushroom_row, mushroom_col), poisons

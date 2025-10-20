@@ -1,14 +1,17 @@
 # Tamaño del tablero
-6 6
+10 10
 
 # Beta
-2
+1
+
+# Epsilon
+2.0
 
 # Posición inicial de la hormiga
 0 0
 
 # Posición del hongo
-4 4
+9 1
 
 # Posiciones de venenos
 1 1
@@ -18,3 +21,5 @@
 3 1
 2 1
 4 1
+8 0
+7 0
