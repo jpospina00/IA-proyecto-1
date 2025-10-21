@@ -8,7 +8,7 @@ COST_POISON = 10.0
 
 
 def dynamic_weighted_a_star(grid_size: tuple, start: tuple, goal: tuple, poisons: list, epsilon: float = 1.0,
-                            allow_poison_pass: bool = False):
+                            allow_poison_pass: int = 0):
     print("#" * 40)
     print("=== Inicia el Algoritmo Dynamic Weighted A* ===")
     print(f"Inicio:{start}")
@@ -67,7 +67,7 @@ def dynamic_weighted_a_star(grid_size: tuple, start: tuple, goal: tuple, poisons
         if len(current_node.get_path()) > 5:
             print(f"... {current_node.get_path()[-1]}")
 
-        if allow_poison_pass:
+        if allow_poison_pass == 0:
             r, c = current_state
             candidates = [
                 (r - 1, c),

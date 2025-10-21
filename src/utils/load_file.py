@@ -12,7 +12,8 @@ def load_world_from_file(filename):
     epsilon = float(lines[2])
 
     # Paso por Venenos
-    poisons_pass = bool(lines[3])
+    poisons_pass = int(lines[3])
+
     # Hormiga
     ant_row, ant_col = map(int, lines[4].split())
 

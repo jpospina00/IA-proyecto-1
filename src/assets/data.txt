@@ -8,7 +8,7 @@
 2.0
 
 # Paso por venenos
-true
+1
 
 # Posición inicial de la hormiga
 0 0
