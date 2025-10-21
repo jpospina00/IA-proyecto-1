@@ -7,7 +7,7 @@ from algortithms.beam_search import beam_search
 from algortithms.dynamic_weighting import dynamic_weighted_a_star
 from utils.load_file import load_world_from_file
 
-(grid_size, beta, epsilon, ant_start, mushroom_pos, poisons_pos) = load_world_from_file("src/assets/data.txt")
+(grid_size, beta, epsilon, ant_start, mushroom_pos, poisons_pos, poisons_pas) = load_world_from_file("src/assets/data.txt")
 
 def setup_world():
     # Alternativamente, cargar desde archivo:
@@ -33,7 +33,7 @@ def run_beam_search():
 
 def run_dynamic_weighted():
     grid, ant, mushroom, poisons = setup_world()
-    path = dynamic_weighted_a_star((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], epsilon=epsilon)
+    path = dynamic_weighted_a_star((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], epsilon=epsilon, allow_poison_pass=poisons_pas)
     run_gui((grid_size[0], grid_size[1]), (ant.row, ant.col), (mushroom.row, mushroom.col), [(p.row, p.col) for p in poisons], path)
 
 

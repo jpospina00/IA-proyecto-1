@@ -7,6 +7,9 @@
 # Epsilon
 2.0
 
+# Paso por venenos
+true
+
 # Posición inicial de la hormiga
 0 0
 
@@ -23,3 +26,5 @@
 4 1
 8 0
 7 0
+
+
